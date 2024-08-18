@@ -377,6 +377,14 @@
         .navigation-icon {
             cursor: pointer;
         }
+
+        .label-style {
+            color: black; /* Cor do texto */
+            font-weight: bold; /* Texto em negrito */
+            text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff; /* Sombra de texto para criar o buffer branco */
+        }
+
+        
     </style>
 </head>
 <body>
@@ -491,8 +499,13 @@
             if (currentOverlay) {
                 map.removeLayer(currentOverlay);
             }
+    
+            const currentZoom = map.getZoom();
+            const currentCenter = map.getCenter();
+
             currentOverlay = L.imageOverlay(imageUrl, bounds).addTo(map);
-            map.fitBounds(bounds);
+    
+            map.setView(currentCenter, currentZoom); // Mantém a posição e o zoom atuais
         }
 
         fetch('camadas/coordenadas.txt')
@@ -507,11 +520,16 @@
                 addImageOverlay('camadas/ortofoto.png', bounds);
                 document.getElementById('layers').addEventListener('change', function(e) {
                     const selectedLayer = e.target.value;
+                    const currentZoom = map.getZoom();
+                    const currentCenter = map.getCenter();
+
                     if (selectedLayer === 'ortofoto') {
                         addImageOverlay('camadas/ortofoto.png', bounds);
                     } else if (selectedLayer === 'vari') {
                         addImageOverlay('camadas/vari.png', bounds);
                     }
+
+                    map.setView(currentCenter, currentZoom); // Mantém a posição e o zoom atuais após a troca
                 });
             })
             .catch(error => {
