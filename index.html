@@ -223,7 +223,7 @@
 
         .button-group button {
             width: 100px;
-            height: autox;
+            height: auto;
             min-height: 25px;
             font-size: 12px;
             background-color: #E8FFF1;
@@ -276,6 +276,10 @@
             font-size: 16px;
             color: red;
             text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+        }
+
+        .label-style {
+            text-shadow: 1px 1px 2px white, -1px -1px 2px white;
         }
 
         .collapse-arrow {
@@ -377,14 +381,6 @@
         .navigation-icon {
             cursor: pointer;
         }
-
-        .label-style {
-            color: black; /* Cor do texto */
-            font-weight: bold; /* Texto em negrito */
-            text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff; /* Sombra de texto para criar o buffer branco */
-        }
-
-        
     </style>
 </head>
 <body>
@@ -494,18 +490,23 @@
         const colorPalette = ['#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#800000', '#008000', '#000080', '#808000', '#800080', '#008080', '#c0c0c0', '#ff6347', '#40e0d0', '#ee82ee', '#ff0000']; // Alterado para mover o vermelho para o final
 
         let usedColors = [];
+        let lastViewState = {
+            center: null,
+            zoom: null
+        };
 
         function addImageOverlay(imageUrl, bounds) {
             if (currentOverlay) {
                 map.removeLayer(currentOverlay);
             }
-    
-            const currentZoom = map.getZoom();
-            const currentCenter = map.getCenter();
-
             currentOverlay = L.imageOverlay(imageUrl, bounds).addTo(map);
-    
-            map.setView(currentCenter, currentZoom); // Mantém a posição e o zoom atuais
+            if (!lastViewState.center || !lastViewState.zoom) {
+                map.fitBounds(bounds);
+                lastViewState.center = map.getCenter();
+                lastViewState.zoom = map.getZoom();
+            } else {
+                map.setView(lastViewState.center, lastViewState.zoom);
+            }
         }
 
         fetch('camadas/coordenadas.txt')
@@ -520,16 +521,13 @@
                 addImageOverlay('camadas/ortofoto.png', bounds);
                 document.getElementById('layers').addEventListener('change', function(e) {
                     const selectedLayer = e.target.value;
-                    const currentZoom = map.getZoom();
-                    const currentCenter = map.getCenter();
-
+                    lastViewState.center = map.getCenter();
+                    lastViewState.zoom = map.getZoom();
                     if (selectedLayer === 'ortofoto') {
                         addImageOverlay('camadas/ortofoto.png', bounds);
                     } else if (selectedLayer === 'vari') {
                         addImageOverlay('camadas/vari.png', bounds);
                     }
-
-                    map.setView(currentCenter, currentZoom); // Mantém a posição e o zoom atuais após a troca
                 });
             })
             .catch(error => {
