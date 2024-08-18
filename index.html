@@ -706,14 +706,14 @@
                 const item = legendItems[key];
                 const legendItem = document.createElement('div');
                 legendItem.className = 'legend-item';
-                legendItem.innerHTML = 
+                legendItem.innerHTML = `
                     <div class="legend-color" style="background-color:${item.color}"></div>
                     <div>
                         <strong>${key}</strong><br>
                         Área: ${item.area.toFixed(2)} ha<br>
                         Total produto: ${item.volume.toFixed(2)}
                     </div>
-                ;
+                `;
                 legendContainer.appendChild(legendItem);
             }
         }
@@ -954,7 +954,7 @@
         function adjustImageWidth() {
             const container = document.getElementById('cabeçalho-esquerdo');
             const img = document.getElementById('img-cabecalho-esquerdo');
-            img.style.width = ${container.clientWidth}px;
+            img.style.width = `${container.clientWidth}px`;
         }
 
         // Função para alterar a imagem do cabeçalho esquerdo em telas menores
@@ -991,7 +991,7 @@
 
             map.setView([lat, lon], 16);
 
-            console.log(Localização atualizada!\nLatitude: ${lat}\nLongitude: ${lon}\nPrecisão: ${accuracy} metros.);
+            console.log(`Localização atualizada!\nLatitude: ${lat}\nLongitude: ${lon}\nPrecisão: ${accuracy} metros.`);
         }
 
         function showError(error) {
@@ -1042,7 +1042,7 @@
         function showExportSuccessPopup() {
             const popup = document.createElement('div');
             popup.className = 'popup';
-            popup.innerHTML = 
+            popup.innerHTML = `
                 <p>Como prefere continuar?</p>
                 <p></p>                
                 <div class="button-group">
@@ -1050,7 +1050,7 @@
                     <button id="new-operation-button">Iniciar nova operação</button>
                     <button id="home-button">Página inicial</button>
                 </div>
-            ;
+            `;
             document.body.appendChild(popup);
 
             document.getElementById('continue-button').addEventListener('click', function() {
