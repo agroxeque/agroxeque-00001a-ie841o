@@ -53,9 +53,12 @@
             width: 100%;
         }
 
-        #cabeçalho-direito a img {
-            width: 148px;
-            height: 115px;
+        #cabeçalho-direito img {
+            width: 100%;
+            height: auto;
+            max-width: 148px;
+            max-height: 115px;
+            object-fit: contain;
         }
 
         #produto-tarefa-menu-container {
@@ -374,7 +377,7 @@
         }
 
         /* Estilos para cursor pointer em elementos clicáveis */
-        #cabeçalho-direito a, button {
+        #cabeçalho-direito, button {
             cursor: pointer;
         }
 
